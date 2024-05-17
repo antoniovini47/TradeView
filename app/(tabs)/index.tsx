@@ -31,6 +31,8 @@ export default function HomeScreen() {
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
 
+  function getTradeDataJSON();
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
@@ -41,12 +43,17 @@ export default function HomeScreen() {
         />
       }>
       <ThemedText>Websocket Status: {connectionStatus}</ThemedText>
-      <ThemedText>Ultima mensagem: </ThemedText>
-      {connectionStatus == "Open" && messageHistory[messageHistory.length - 1] ? (
-        <ThemedText>{messageHistory[messageHistory.length - 1].data}</ThemedText>
-      ) : (
-        <ThemedText>B</ThemedText>
-      )}
+      <ThemedText>
+        Última cotação:
+        {connectionStatus == "Open" && messageHistory[messageHistory.length - 1] ? (
+          <ThemedText>
+            Última cotação: {JSON.parse(messageHistory[messageHistory.length - 1].data).p}
+          </ThemedText>
+        ) : (
+          <ThemedText>B</ThemedText>
+        )}
+      </ThemedText>
+
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome, Tom!</ThemedText>
         <HelloWave />
