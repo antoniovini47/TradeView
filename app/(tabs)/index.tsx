@@ -1,4 +1,9 @@
+import React, { useState, useEffect, useCallback } from "react";
+import { View, Button, Text } from "react-native";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+
 import { Image, StyleSheet, Platform } from "react-native";
+import { message } from "antd";
 
 import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
@@ -6,6 +11,26 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 
 export default function HomeScreen() {
+  //Public API that will echo messages sent to it back to the client
+  const [socketUrl, setSocketUrl] = useState("wss://fstream.binance.com/ws/bnbusdt@aggTrade");
+  const [messageHistory, setMessageHistory] = useState<MessageEvent<any>[]>([]);
+
+  const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+
+  useEffect(() => {
+    if (lastMessage !== null) {
+      setMessageHistory((prev) => prev.concat(lastMessage));
+    }
+  }, [lastMessage]);
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState];
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
@@ -15,6 +40,13 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
+      <ThemedText>Websocket Status: {connectionStatus}</ThemedText>
+      <ThemedText>Ultima mensagem: </ThemedText>
+      {connectionStatus == "Open" && messageHistory[messageHistory.length - 1] ? (
+        <ThemedText>{messageHistory[messageHistory.length - 1].data}</ThemedText>
+      ) : (
+        <ThemedText>B</ThemedText>
+      )}
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome, Tom!</ThemedText>
         <HelloWave />
