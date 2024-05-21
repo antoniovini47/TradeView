@@ -19,6 +19,23 @@ export const styles = StyleSheet.create({
   },
   coinTradeStatsViewContainer: {
     flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  searchViewContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     gap: 8,
+    marginBottom: 8,
+  },
+  textInputSearch: {
+    height: 50,
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 5,
+    width: "100%",
+  },
+  textButton: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
