@@ -60,16 +60,6 @@ export default function ChartsScreen() {
 
       <CoinTradeStats coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
       <CoinChart coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
-
-      {/* <ThemedView>
-        {followedCoins.map((coin) => {
-          return (
-            <ThemedView key={coin}>
-              <ThemedText>{coin}</ThemedText>
-            </ThemedView>
-          );
-        })}
-      </ThemedView> */}
     </ParallaxScrollView>
   );
 }
