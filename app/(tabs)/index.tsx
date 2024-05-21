@@ -1,12 +1,6 @@
 import React from "react";
 
-import {
-  Image,
-  ScrollView,
-  View,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-} from "react-native";
+import { Image, ScrollView, View } from "react-native";
 
 import { ThemedTouchableOpacity } from "@/components/ThemedTouchableOpacity";
 import { ThemedTextInput } from "@/components/ThemedTextInput";
@@ -16,17 +10,32 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import CoinTradeStats from "@/components/CoinTradeStats";
-import { useThemeColor } from "@/hooks/useThemeColor";
+
+const allCoinsDB = [
+  { name: "Bitcoin", symbol: "BTC", code: "btcusdt" },
+  { name: "Ethereum", symbol: "ETH", code: "ethusdt" },
+  { name: "Binance Coin", symbol: "BNB", code: "bnbusdt" },
+  { name: "Dogecoin", symbol: "DOGE", code: "dogeusdt" },
+  { name: "Litecoin", symbol: "LTC", code: "ltcusdt" },
+];
 
 export default function HomeScreen() {
-  const [followedCoins, setFollowedCoins] = React.useState(["bnbusdt", "btcusdt", "ethusdt"]);
+  const [followedCoins, setFollowedCoins] = React.useState(["bnbusdt"]);
+  const [typedSearch, setTypedSearch] = React.useState("");
+
   function handleRemoveCoin(coin: string) {
     setFollowedCoins(followedCoins.filter((c) => c !== coin));
-    console.log("unfollowed: ", coin);
   }
 
-  function handleAddSearch() {
-    setFollowedCoins([...followedCoins, "dogeusdt"]);
+  const inputSearchRef = React.useRef(null);
+
+  function handleAddSearch(coinCode: string) {
+    if (followedCoins.includes(coinCode)) {
+      console.log("Coin already followed");
+      return;
+    }
+    setFollowedCoins([...followedCoins, coinCode]);
+    setTypedSearch("");
   }
 
   return (
@@ -44,21 +53,34 @@ export default function HomeScreen() {
       </ThemedView>
 
       <View style={styles.searchViewContainer}>
-        <ThemedTextInput type="search" />
-
-        <ThemedTouchableOpacity onPress={handleAddSearch}>
-          <ThemedText type="invertedThemeColors">Adicionar</ThemedText>
-        </ThemedTouchableOpacity>
+        <ThemedTextInput
+          onChange={(e) => setTypedSearch(e.nativeEvent.text)}
+          ref={inputSearchRef}
+          key={"textInputSearch"}
+          type="search"
+        />
       </View>
+      {typedSearch.length > 0
+        ? allCoinsDB.map((coin) => {
+            if (
+              coin.name.toLowerCase().includes(typedSearch.toLowerCase()) ||
+              coin.symbol.toLowerCase().includes(typedSearch.toLowerCase())
+            ) {
+              return (
+                <ThemedTouchableOpacity onPress={handleAddSearch.bind(null, coin.code)}>
+                  <ThemedText type="invertedThemeColors">{coin.name}</ThemedText>
+                </ThemedTouchableOpacity>
+              );
+            }
+          })
+        : null}
 
       <ThemedText type="title">Your followed coins:</ThemedText>
       <ScrollView>
         {followedCoins.map((coin) => (
           <View key={"viewCoin" + coin} style={styles.coinTradeStatsViewContainer}>
             <CoinTradeStats coin={coin} key={coin} />
-            <ThemedTouchableOpacity
-              key={"buttonUnfollow" + coin}
-              onPress={handleRemoveCoin.bind(null, coin)}>
+            <ThemedTouchableOpacity onPress={handleRemoveCoin.bind(null, coin)}>
               <ThemedText type="invertedThemeColors">Remover</ThemedText>
             </ThemedTouchableOpacity>
           </View>
