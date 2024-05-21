@@ -1,7 +1,5 @@
 import React from "react";
-
 import { Image, ScrollView, View } from "react-native";
-
 import { ThemedTouchableOpacity } from "@/components/ThemedTouchableOpacity";
 import { ThemedTextInput } from "@/components/ThemedTextInput";
 import { styles } from "./styles";
@@ -10,16 +8,11 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import CoinTradeStats from "@/components/CoinTradeStats";
-import { allCoinsDB, yourFollowedCoins } from "@/constants/Coins";
+import { allCoinsDB, yourFollowedCoins, removeFollowedCoin } from "@/constants/Coins";
 
 export default function HomeScreen() {
   const [followedCoins, setFollowedCoins] = React.useState(yourFollowedCoins);
   const [typedSearch, setTypedSearch] = React.useState("");
-
-  function handleRemoveCoin(coin: string) {
-    setFollowedCoins(followedCoins.filter((c) => c !== coin));
-    console.log(`Followed coins: ${followedCoins}`);
-  }
 
   function handleAddSearch(coinCode: string) {
     if (followedCoins.includes(coinCode)) {
@@ -28,6 +21,11 @@ export default function HomeScreen() {
     }
     setFollowedCoins([...followedCoins, coinCode]);
     setTypedSearch("");
+  }
+
+  function handleRemoveCoin(coin: string) {
+    setFollowedCoins(followedCoins.filter((c) => c !== coin));
+    removeFollowedCoin(coin);
   }
 
   return (
@@ -48,7 +46,7 @@ export default function HomeScreen() {
         <ThemedTextInput
           onChange={(e) => setTypedSearch(e.nativeEvent.text)}
           key={"textInputSearch"}
-          type="search"
+          type="addCoin"
         />
       </View>
       {typedSearch.length > 0
@@ -71,8 +69,12 @@ export default function HomeScreen() {
         {followedCoins.map((coin) => (
           <View key={"viewCoin" + coin} style={styles.coinTradeStatsViewContainer}>
             <CoinTradeStats coin={coin} key={coin} />
-            <ThemedTouchableOpacity onPress={handleRemoveCoin.bind(null, coin)}>
-              <ThemedText type="invertedThemeColors">Remover</ThemedText>
+            <ThemedTouchableOpacity
+              key={"button" + coin}
+              onPress={handleRemoveCoin.bind(null, coin)}>
+              <ThemedText key={"text" + coin} type="invertedThemeColors">
+                Remover
+              </ThemedText>
             </ThemedTouchableOpacity>
           </View>
         ))}

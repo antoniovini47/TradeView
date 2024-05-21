@@ -1,5 +1,17 @@
 export const yourFollowedCoins = ["bnbusdt"];
 
+export function addFollowedCoin(code: string) {
+  yourFollowedCoins.push(code);
+}
+
+export function removeFollowedCoin(code: string) {
+  yourFollowedCoins.splice(yourFollowedCoins.indexOf(code), 1);
+}
+
+export function getFollowedCoins() {
+  return yourFollowedCoins;
+}
+
 export const allCoinsDB = [
   { name: "Bitcoin", symbol: "BTC", code: "btcusdt" },
   { name: "Ethereum", symbol: "ETH", code: "ethusdt" },
@@ -7,3 +19,7 @@ export const allCoinsDB = [
   { name: "Dogecoin", symbol: "DOGE", code: "dogeusdt" },
   { name: "Litecoin", symbol: "LTC", code: "ltcusdt" },
 ];
+
+export function getAllCoinsDB() {
+  return allCoinsDB;
+}

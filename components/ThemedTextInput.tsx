@@ -5,7 +5,7 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 export type ThemedTextInputProps = TextInputProps & {
   lightColor?: string;
   darkColor?: string;
-  type?: "default" | "search";
+  type?: "default" | "search" | "addCoin";
 };
 
 export const ThemedTextInput = React.forwardRef<TextInput, ThemedTextInputProps>(
@@ -28,8 +28,11 @@ export const ThemedTextInput = React.forwardRef<TextInput, ThemedTextInputProps>
           },
           type === "default" ? styles.default : undefined,
           type === "search" ? styles.search : undefined,
+          type === "search" ? styles.addCoin : undefined,
         ]}
-        placeholder={type === "search" ? "Search..." : "Type here..."}
+        placeholder={
+          type === "search" ? "Search..." : type === "addCoin" ? "Add coin..." : "Type here..."
+        }
         {...rest}
       />
     );
@@ -42,4 +45,5 @@ const styles = StyleSheet.create({
   search: {
     //Specifics configs
   },
+  addCoin: {},
 });

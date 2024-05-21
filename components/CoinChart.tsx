@@ -3,7 +3,7 @@ import useWebSocket, { ReadyState } from "react-use-websocket";
 import { View } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 
-export default function CoinTradeStats(props: { coin: string }) {
+export default function CoinChart(props: { coin: string }) {
   const socketUrl = "wss://fstream.binance.com/";
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(
