@@ -1,36 +1,26 @@
 import React, { useEffect } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import { View } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { CandlestickChart } from "react-native-wagmi-charts";
 import { ThemedView } from "./ThemedView";
 
-const statsInterval = "1m";
+type FormattedDataCoinType = {
+  timestamp: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+};
 
 export default function CoinChart(props: { coin: string }) {
   const socketUrl = "wss://fstream.binance.com/";
-  const [dataChart, setDataChart] = React.useState([
-    {
-      timestamp: 1625945400000,
-      open: 33575.25,
-      high: 33600.52,
-      low: 33475.12,
-      close: 33520.11,
-    },
-    {
-      timestamp: 1625948100000,
-      open: 33215.25,
-      high: 33430.52,
-      low: 33215.12,
-      close: 33420.11,
-    },
-  ]);
+  const [dataChart, setDataChart] = React.useState([] as FormattedDataCoinType[]);
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(
-    socketUrl + "ws/" + props.coin + "@kline_" + statsInterval
+    socketUrl + "ws/" + props.coin + "@kline_1m"
   );
 
-  const [formattedDataCoin, setFormattedDataCoin] = React.useState({
+  const [formattedDataCoin, setFormattedDataCoin] = React.useState<FormattedDataCoinType>({
     timestamp: 0,
     open: 0,
     high: 0,
@@ -39,18 +29,22 @@ export default function CoinChart(props: { coin: string }) {
   });
 
   useEffect(() => {
-    if (lastMessage && lastMessage.data != null) {
+    if (connectionStatus == "Open" && lastMessage && lastMessage.data != null) {
       const data = JSON.parse(lastMessage.data);
       setFormattedDataCoin({
-        timestamp: data.E,
+        timestamp: data.k.t,
         open: data.k.o,
         high: data.k.h,
         low: data.k.l,
         close: data.k.c,
       });
-      console.log(`Data coin: ${JSON.stringify(formattedDataCoin)}`);
-      setDataChart([...dataChart, formattedDataCoin]);
-      console.log(`Data chart: ${JSON.stringify(dataChart)}`);
+      if (formattedDataCoin.timestamp === 0) return;
+      if (dataChart.length > 10) {
+        setDataChart([...dataChart.slice(1), formattedDataCoin]);
+      } else {
+        setDataChart([...dataChart, formattedDataCoin]);
+      }
+      console.log("Data chart", dataChart);
     }
   }, [lastMessage]);
 
@@ -67,12 +61,12 @@ export default function CoinChart(props: { coin: string }) {
     .toUpperCase()}`;
 
   return (
-    <View>
+    <ThemedView>
       <ThemedText type="title">{formattedTextCoin}</ThemedText>
       <ThemedText>
         Preço:
         {connectionStatus == "Open" && lastMessage && lastMessage.data != null ? (
-          <ThemedText> {JSON.parse(lastMessage.data).p}</ThemedText>
+          <ThemedText> {JSON.parse(lastMessage.data).k.c}</ThemedText>
         ) : (
           <ThemedText> Loading...</ThemedText>
         )}
@@ -80,7 +74,7 @@ export default function CoinChart(props: { coin: string }) {
       <ThemedText>
         Quantidade:
         {connectionStatus == "Open" && lastMessage && lastMessage.data != null ? (
-          <ThemedText> {JSON.parse(lastMessage.data).q}</ThemedText>
+          <ThemedText> {JSON.parse(lastMessage.data).k.q}</ThemedText>
         ) : (
           <ThemedText> Loading...</ThemedText>
         )}
@@ -93,15 +87,6 @@ export default function CoinChart(props: { coin: string }) {
           </CandlestickChart>
         </CandlestickChart.Provider>
       </ThemedView>
-
-      <ThemedText>
-        JSON Completo:
-        {connectionStatus == "Open" && lastMessage && lastMessage.data != null ? (
-          <ThemedText> {JSON.stringify(lastMessage.data)}</ThemedText>
-        ) : (
-          <ThemedText> Loading...</ThemedText>
-        )}
-      </ThemedText>
-    </View>
+    </ThemedView>
   );
 }

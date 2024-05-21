@@ -58,8 +58,9 @@ export default function ChartsScreen() {
         dropdownStyle={styles.dropdownMenuStyle}
       />
 
-      <CoinTradeStats coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
-      <CoinChart coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
+      <ThemedView>
+        <CoinChart coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
+      </ThemedView>
     </ParallaxScrollView>
   );
 }
