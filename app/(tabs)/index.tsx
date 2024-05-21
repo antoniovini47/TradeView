@@ -10,24 +10,16 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import CoinTradeStats from "@/components/CoinTradeStats";
-
-const allCoinsDB = [
-  { name: "Bitcoin", symbol: "BTC", code: "btcusdt" },
-  { name: "Ethereum", symbol: "ETH", code: "ethusdt" },
-  { name: "Binance Coin", symbol: "BNB", code: "bnbusdt" },
-  { name: "Dogecoin", symbol: "DOGE", code: "dogeusdt" },
-  { name: "Litecoin", symbol: "LTC", code: "ltcusdt" },
-];
+import { allCoinsDB, yourFollowedCoins } from "@/constants/Coins";
 
 export default function HomeScreen() {
-  const [followedCoins, setFollowedCoins] = React.useState(["bnbusdt"]);
+  const [followedCoins, setFollowedCoins] = React.useState(yourFollowedCoins);
   const [typedSearch, setTypedSearch] = React.useState("");
 
   function handleRemoveCoin(coin: string) {
     setFollowedCoins(followedCoins.filter((c) => c !== coin));
+    console.log(`Followed coins: ${followedCoins}`);
   }
-
-  const inputSearchRef = React.useRef(null);
 
   function handleAddSearch(coinCode: string) {
     if (followedCoins.includes(coinCode)) {
@@ -55,7 +47,6 @@ export default function HomeScreen() {
       <View style={styles.searchViewContainer}>
         <ThemedTextInput
           onChange={(e) => setTypedSearch(e.nativeEvent.text)}
-          ref={inputSearchRef}
           key={"textInputSearch"}
           type="search"
         />
