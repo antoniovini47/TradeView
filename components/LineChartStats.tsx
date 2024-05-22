@@ -64,9 +64,9 @@ export default function LineChartStats(props: { coin: string }) {
         <LineChart.Provider data={dataLineChart}>
           <LineChart>
             {useColorScheme() === "dark" ? (
-              <LineChart.Path color="white" />
+              <LineChart.Path color="#0BB8F0" />
             ) : (
-              <LineChart.Path color="black" />
+              <LineChart.Path color="#087EA4" />
             )}
 
             {__DEV__ ? null : (
