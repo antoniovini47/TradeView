@@ -34,5 +34,8 @@ export function ThemedTouchableOpacity({
 const styles = StyleSheet.create({
   default: {
     //Specifics configs
+    justifyContent: "center",
+    paddingHorizontal: 16,
+    borderRadius: 8,
   },
 });

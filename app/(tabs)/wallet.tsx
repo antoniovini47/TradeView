@@ -15,9 +15,6 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Wallet screen</ThemedText>
-      </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="title">Your balance: $ 1.000,00</ThemedText>
         <ThemedText type="subtitle">Available for withdrawal: $ 850,00</ThemedText>

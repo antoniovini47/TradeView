@@ -2,6 +2,7 @@ import React from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { View } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
+import { styles } from "@/app/(tabs)/styles";
 
 export default function CoinTradeStats(props: { coin: string; type?: string }) {
   const socketUrl = "wss://fstream.binance.com/";
@@ -23,7 +24,7 @@ export default function CoinTradeStats(props: { coin: string; type?: string }) {
     .toUpperCase()}`;
 
   return (
-    <View>
+    <View style={styles.coinTradeStatsViewContainerParent}>
       <ThemedText type="title">{formattedCoin}</ThemedText>
       <ThemedText>
         Price:

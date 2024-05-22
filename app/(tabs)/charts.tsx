@@ -27,7 +27,7 @@ export default function ChartsScreen() {
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
       headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Charts screen</ThemedText>
+        <ThemedText type="title">Real-Time Charts</ThemedText>
       </ThemedView>
 
       <SelectDropdown
@@ -60,11 +60,17 @@ export default function ChartsScreen() {
       />
 
       <ThemedView>
-        <CoinTradeStats coin={selectedCoin === null ? "btcusdt" : selectedCoin} type="full" />
-        <LineChartStats coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
-        <ThemedText type="subtitle">Line Chart</ThemedText>
-        <CandleChartStats coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
-        <ThemedText type="subtitle">Candlesticks Chart</ThemedText>
+        <ThemedView style={styles.containerCoinStats}>
+          <CoinTradeStats coin={selectedCoin === null ? "btcusdt" : selectedCoin} type="full" />
+        </ThemedView>
+        <ThemedView>
+          <ThemedText type="subtitle">Line Chart</ThemedText>
+          <LineChartStats coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
+        </ThemedView>
+        <ThemedView>
+          <ThemedText type="subtitle">Candlesticks Chart</ThemedText>
+          <CandleChartStats coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
+        </ThemedView>
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -125,5 +131,8 @@ const styles = StyleSheet.create({
   dropdownItemIconStyle: {
     fontSize: 28,
     marginRight: 8,
+  },
+  containerCoinStats: {
+    marginBottom: 20,
   },
 });

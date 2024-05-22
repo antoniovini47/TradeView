@@ -24,20 +24,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="prices"
-        options={{
-          title: "Prices",
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? "cash" : "cash-outline"} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="charts"
         options={{
           title: "Charts",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? "stats-chart" : "stats-chart-outline"} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="prices"
+        options={{
+          title: "Prices",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? "cash" : "cash-outline"} color={color} />
           ),
         }}
       />

@@ -19,7 +19,7 @@ export default function HomeScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Prices screen</ThemedText>
+        <ThemedText type="title">CriptoPrices</ThemedText>
       </ThemedView>
       <ThemedView>
         {allCoinsDB.map((coin) => {
