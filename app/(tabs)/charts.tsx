@@ -5,10 +5,11 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { getAllCoinsDB } from "@/constants/Coins";
 import SelectDropdown from "react-native-select-dropdown";
+import CoinTradeStats from "@/components/CoinTradeStats";
 
 import React from "react";
-import CoinTradeStats from "@/components/CoinTradeStats";
-import CoinChart from "@/components/CoinChart";
+import CandleChartStats from "@/components/CandleChartStats";
+import LineChartStats from "@/components/LineChartStats";
 
 const coinsOptions = getAllCoinsDB();
 
@@ -59,7 +60,11 @@ export default function ChartsScreen() {
       />
 
       <ThemedView>
-        <CoinChart coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
+        <CoinTradeStats coin={selectedCoin === null ? "btcusdt" : selectedCoin} type="full" />
+        <LineChartStats coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
+        <ThemedText type="subtitle">Line Chart</ThemedText>
+        <CandleChartStats coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
+        <ThemedText type="subtitle">Candlesticks Chart</ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );
