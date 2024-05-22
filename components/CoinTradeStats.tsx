@@ -3,7 +3,7 @@ import useWebSocket, { ReadyState } from "react-use-websocket";
 import { View } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 
-export default function CoinTradeStats(props: { coin: string }) {
+export default function CoinTradeStats(props: { coin: string; type: string }) {
   const socketUrl = "wss://fstream.binance.com/";
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(
@@ -26,7 +26,7 @@ export default function CoinTradeStats(props: { coin: string }) {
     <View>
       <ThemedText type="title">{formattedCoin}</ThemedText>
       <ThemedText>
-        Preço:
+        Price:
         {connectionStatus == "Open" && lastMessage && lastMessage.data != null ? (
           <ThemedText> {JSON.parse(lastMessage.data).p}</ThemedText>
         ) : (
@@ -34,13 +34,23 @@ export default function CoinTradeStats(props: { coin: string }) {
         )}
       </ThemedText>
       <ThemedText>
-        Quantidade:
+        Quantity:
         {connectionStatus == "Open" && lastMessage && lastMessage.data != null ? (
           <ThemedText> {JSON.parse(lastMessage.data).q}</ThemedText>
         ) : (
           <ThemedText> Loading...</ThemedText>
         )}
       </ThemedText>
+      {props.type === "full" ? (
+        <ThemedText>
+          Quantidade:
+          {connectionStatus == "Open" && lastMessage && lastMessage.data != null ? (
+            <ThemedText> {JSON.parse(lastMessage.data).q}</ThemedText>
+          ) : (
+            <ThemedText> Loading...</ThemedText>
+          )}
+        </ThemedText>
+      ) : null}
     </View>
   );
 }
