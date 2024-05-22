@@ -1,14 +1,15 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { getAllCoinsDB } from "@/constants/Coins";
 import SelectDropdown from "react-native-select-dropdown";
+import CoinTradeStats from "@/components/CoinTradeStats";
 
 import React from "react";
-import CoinTradeStats from "@/components/CoinTradeStats";
-import CoinChart from "@/components/CoinChart";
+import CandleChartStats from "@/components/CandleChartStats";
+import LineChartStats from "@/components/LineChartStats";
 
 const coinsOptions = getAllCoinsDB();
 
@@ -23,10 +24,12 @@ export default function ChartsScreen() {
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
-      headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
+      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
+      headerImage={
+        <Image source={require("@/assets/images/chart-logo.png")} style={styles.bannerLogo} />
+      }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Charts screen</ThemedText>
+        <ThemedText type="title">Real-Time Charts</ThemedText>
       </ThemedView>
 
       <SelectDropdown
@@ -58,18 +61,19 @@ export default function ChartsScreen() {
         dropdownStyle={styles.dropdownMenuStyle}
       />
 
-      <CoinTradeStats coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
-      <CoinChart coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
-
-      {/* <ThemedView>
-        {followedCoins.map((coin) => {
-          return (
-            <ThemedView key={coin}>
-              <ThemedText>{coin}</ThemedText>
-            </ThemedView>
-          );
-        })}
-      </ThemedView> */}
+      <ThemedView>
+        <ThemedView style={styles.containerCoinStats}>
+          <CoinTradeStats coin={selectedCoin === null ? "btcusdt" : selectedCoin} type="full" />
+        </ThemedView>
+        <ThemedView>
+          <ThemedText type="subtitle">Line Chart</ThemedText>
+          <LineChartStats coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
+        </ThemedView>
+        <ThemedView>
+          <ThemedText type="subtitle">Candlesticks Chart</ThemedText>
+          <CandleChartStats coin={selectedCoin === null ? "btcusdt" : selectedCoin} />
+        </ThemedView>
+      </ThemedView>
     </ParallaxScrollView>
   );
 }
@@ -79,6 +83,13 @@ const styles = StyleSheet.create({
     color: "#808080",
     bottom: -90,
     left: -35,
+    position: "absolute",
+  },
+  bannerLogo: {
+    height: 178,
+    width: 290,
+    bottom: 0,
+    left: 0,
     position: "absolute",
   },
   titleContainer: {
@@ -129,5 +140,8 @@ const styles = StyleSheet.create({
   dropdownItemIconStyle: {
     fontSize: 28,
     marginRight: 8,
+  },
+  containerCoinStats: {
+    marginBottom: 20,
   },
 });

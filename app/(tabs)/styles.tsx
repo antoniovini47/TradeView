@@ -17,9 +17,11 @@ export const styles = StyleSheet.create({
     left: 0,
     position: "absolute",
   },
+  coinTradeStatsViewContainerParent: {},
   coinTradeStatsViewContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingBottom: 8,
   },
   searchViewContainer: {
     flexDirection: "row",

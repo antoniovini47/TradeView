@@ -1,5 +1,6 @@
 import React from "react";
-import { Image, ScrollView, View } from "react-native";
+import { Swipeable } from "react-native-gesture-handler";
+import { Image, ScrollView, View, Platform } from "react-native";
 import { ThemedTouchableOpacity } from "@/components/ThemedTouchableOpacity";
 import { ThemedTextInput } from "@/components/ThemedTextInput";
 import { styles } from "./styles";
@@ -56,9 +57,9 @@ export default function HomeScreen() {
               coin.symbol.toLowerCase().includes(typedSearch.toLowerCase())
             ) {
               return (
-                <ThemedTouchableOpacity onPress={handleAddSearch.bind(null, coin.code)}>
-                  <ThemedText type="invertedThemeColors">{coin.name}</ThemedText>
-                </ThemedTouchableOpacity>
+                <ThemedText onPress={handleAddSearch.bind(null, coin.code)} type="subtitle">
+                  Follow {coin.name}
+                </ThemedText>
               );
             }
           })
@@ -69,13 +70,31 @@ export default function HomeScreen() {
         {followedCoins.map((coin) => (
           <View key={"viewCoin" + coin} style={styles.coinTradeStatsViewContainer}>
             <CoinTradeStats coin={coin} key={coin} />
-            <ThemedTouchableOpacity
-              key={"button" + coin}
-              onPress={handleRemoveCoin.bind(null, coin)}>
-              <ThemedText key={"text" + coin} type="invertedThemeColors">
-                Remover
-              </ThemedText>
-            </ThemedTouchableOpacity>
+            {Platform.OS === "android" || __DEV__ ? (
+              <ThemedTouchableOpacity
+                key={"button" + coin}
+                onPress={handleRemoveCoin.bind(null, coin)}>
+                <ThemedText key={"text" + coin} type="invertedThemeColors">
+                  Remover
+                </ThemedText>
+              </ThemedTouchableOpacity>
+            ) : (
+              <Swipeable
+                key={"swipeable" + coin}
+                renderRightActions={() => (
+                  <ThemedTouchableOpacity
+                    key={"button" + coin}
+                    onPress={handleRemoveCoin.bind(null, coin)}>
+                    <ThemedText key={"text" + coin} type="invertedThemeColors">
+                      Remover
+                    </ThemedText>
+                  </ThemedTouchableOpacity>
+                )}>
+                <ThemedText key={"text" + coin} type="invertedThemeColors">
+                  Swipe to remove
+                </ThemedText>
+              </Swipeable>
+            )}
           </View>
         ))}
       </ScrollView>

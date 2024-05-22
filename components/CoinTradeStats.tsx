@@ -2,12 +2,13 @@ import React from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { View } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
+import { styles } from "@/app/(tabs)/styles";
 
-export default function CoinTradeStats(props: { coin: string }) {
+export default function CoinTradeStats(props: { coin: string; type?: string }) {
   const socketUrl = "wss://fstream.binance.com/";
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(
-    socketUrl + "ws/" + props.coin + "@aggTrade"
+    socketUrl + "ws/" + props.coin + "@kline_1d"
   );
 
   const connectionStatus = {
@@ -23,24 +24,69 @@ export default function CoinTradeStats(props: { coin: string }) {
     .toUpperCase()}`;
 
   return (
-    <View>
+    <View style={styles.coinTradeStatsViewContainerParent}>
       <ThemedText type="title">{formattedCoin}</ThemedText>
       <ThemedText>
-        Preço:
+        Price:
         {connectionStatus == "Open" && lastMessage && lastMessage.data != null ? (
-          <ThemedText> {JSON.parse(lastMessage.data).p}</ThemedText>
+          <ThemedText> {JSON.parse(lastMessage.data).k.c}</ThemedText>
         ) : (
           <ThemedText> Loading...</ThemedText>
         )}
       </ThemedText>
-      <ThemedText>
-        Quantidade:
-        {connectionStatus == "Open" && lastMessage && lastMessage.data != null ? (
-          <ThemedText> {JSON.parse(lastMessage.data).q}</ThemedText>
-        ) : (
-          <ThemedText> Loading...</ThemedText>
-        )}
-      </ThemedText>
+      {props.type === "full" ? (
+        <>
+          <ThemedText type="defaultSemiBold">LAST 24 HOURS</ThemedText>
+          <ThemedText>
+            Open:
+            {connectionStatus == "Open" && lastMessage && lastMessage.data != null ? (
+              <ThemedText> {JSON.parse(lastMessage.data).k.o}</ThemedText>
+            ) : (
+              <ThemedText> Loading...</ThemedText>
+            )}
+          </ThemedText>
+          <ThemedText>
+            High:
+            {connectionStatus == "Open" && lastMessage && lastMessage.data != null ? (
+              <ThemedText> {JSON.parse(lastMessage.data).k.h}</ThemedText>
+            ) : (
+              <ThemedText> Loading...</ThemedText>
+            )}
+          </ThemedText>
+          <ThemedText>
+            Low:
+            {connectionStatus == "Open" && lastMessage && lastMessage.data != null ? (
+              <ThemedText> {JSON.parse(lastMessage.data).k.l}</ThemedText>
+            ) : (
+              <ThemedText> Loading...</ThemedText>
+            )}
+          </ThemedText>
+          <ThemedText>
+            Close:
+            {connectionStatus == "Open" && lastMessage && lastMessage.data != null ? (
+              <ThemedText> {JSON.parse(lastMessage.data).k.c}</ThemedText>
+            ) : (
+              <ThemedText> Loading...</ThemedText>
+            )}
+          </ThemedText>
+          <ThemedText>
+            Trades:
+            {connectionStatus == "Open" && lastMessage && lastMessage.data != null ? (
+              <ThemedText> {JSON.parse(lastMessage.data).k.n}</ThemedText>
+            ) : (
+              <ThemedText> Loading...</ThemedText>
+            )}
+          </ThemedText>
+          <ThemedText>
+            Volume:
+            {connectionStatus == "Open" && lastMessage && lastMessage.data != null ? (
+              <ThemedText> {JSON.parse(lastMessage.data).k.v}</ThemedText>
+            ) : (
+              <ThemedText> Loading...</ThemedText>
+            )}
+          </ThemedText>
+        </>
+      ) : null}
     </View>
   );
 }

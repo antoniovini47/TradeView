@@ -33,6 +33,7 @@ export const ThemedTextInput = React.forwardRef<TextInput, ThemedTextInputProps>
         placeholder={
           type === "search" ? "Search..." : type === "addCoin" ? "Add coin..." : "Type here..."
         }
+        placeholderTextColor={"gray"}
         {...rest}
       />
     );

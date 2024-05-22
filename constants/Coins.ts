@@ -1,4 +1,4 @@
-export const yourFollowedCoins = ["bnbusdt"];
+export const yourFollowedCoins = ["bnbusdt", "dogeusdt", "ltcusdt"];
 
 export function addFollowedCoin(code: string) {
   yourFollowedCoins.push(code);
